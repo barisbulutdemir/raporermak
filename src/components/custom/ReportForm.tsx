@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useRef, useEffect, useMemo } from 'react'
+import { useState, useTransition, useEffect, useMemo } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import ReactSignatureCanvas from 'react-signature-canvas'
+
 import { toast } from "sonner"
 import { ReportPdfTemplate } from "./ReportPdfTemplate"
 import jsPDF from 'jspdf'
@@ -161,11 +161,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                 })
             }
 
-            // Capture signature if available
-            let signatureDataUrl = ''
-            if (sigPad.current && !sigPad.current.isEmpty()) {
-                signatureDataUrl = sigPad.current.getTrimmedCanvas().toDataURL('image/png')
-            }
+            // Use default signature if available
+            const signatureDataUrl = defaultSignature || ''
 
             const htmlContent = ReactDOMServer.renderToStaticMarkup(
                 <ReportPdfTemplate data={data} specialDaysData={specialDaysData} signatureDataUrl={signatureDataUrl} />
@@ -311,12 +308,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
         },
     })
 
-    // Set signature if edit mode
-    useEffect(() => {
-        if (initialData?.workerSignature && sigPad.current) {
-            sigPad.current.fromDataURL(initialData.workerSignature)
-        }
-    }, [initialData])
+    // Signature is handled via defaultSignature prop from parent component
 
     const { fields: advanceFields, append: appendAdvance, remove: removeAdvance } = useFieldArray({
         control: form.control,
@@ -328,7 +320,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
         name: "expenses",
     })
 
-    const clearSignature = () => sigPad.current?.clear()
+
 
     // Dialog states
     // Removed redundant local states for dateRange and excludedDates as they conflict with form.watch
@@ -413,11 +405,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                 })
             }
 
-            // Capture signature if available
-            let signatureDataUrl = ''
-            if (sigPad.current && !sigPad.current.isEmpty()) {
-                signatureDataUrl = sigPad.current.getTrimmedCanvas().toDataURL('image/png')
-            }
+            // Use default signature if available
+            const signatureDataUrl = defaultSignature || ''
 
             const htmlContent = ReactDOMServer.renderToStaticMarkup(
                 <ReportPdfTemplate data={data} specialDaysData={specialDaysData} signatureDataUrl={signatureDataUrl} />
@@ -571,11 +560,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                 })
             }
 
-            // Capture signature if available
-            let signatureDataUrl = ''
-            if (sigPad.current && !sigPad.current.isEmpty()) {
-                signatureDataUrl = sigPad.current.getTrimmedCanvas().toDataURL('image/png')
-            }
+            // Use default signature if available
+            const signatureDataUrl = defaultSignature || ''
 
             const htmlContent = ReactDOMServer.renderToStaticMarkup(
                 <ReportPdfTemplate data={data} specialDaysData={specialDaysData} signatureDataUrl={signatureDataUrl} />
@@ -702,17 +688,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
         }
 
         startTransition(async () => {
-            // Get signature data or use existing from initialData if valid
-            let signatureData = ''
-            if (sigPad.current && !sigPad.current.isEmpty()) {
-                const canvas = sigPad.current.getTrimmedCanvas()
-                // Check if canvas is actually empty (sometimes isEmpty() is unreliable if cleared but not reset)
-                // But generally safe. 
-                signatureData = canvas.toDataURL('image/png')
-            } else if (initialData?.workerSignature) {
-                // If user didn't sign but we have initialData, keep it.
-                signatureData = initialData.workerSignature
-            }
+            // Use default signature or existing signature from edit mode
+            const signatureData = defaultSignature || initialData?.workerSignature || ''
 
             if (!signatureData) {
                 toast.error("İmza gereklidir")
