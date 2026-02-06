@@ -1,0 +1,26 @@
+import { ReportForm } from "@/components/custom/ReportForm"
+import { auth } from "@/auth"
+import { prisma } from "@/lib/prisma"
+
+export default async function NewReportPage() {
+    const session = await auth()
+    const userName = session?.user?.name || ''
+
+    // Fetch user's saved signature
+    const user = await prisma.user.findUnique({
+        where: { username: session?.user?.name || '' },
+        select: { signature: true }
+    })
+
+    return (
+        <div className="mx-auto grid w-full max-w-[900px] gap-6">
+            <div className="flex items-center gap-4">
+                <h1 className="text-2xl font-semibold">Yeni Servis Raporu Oluştur</h1>
+            </div>
+            <ReportForm
+                defaultUserName={userName}
+                defaultSignature={user?.signature || undefined}
+            />
+        </div>
+    )
+}

@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String?
+  signature String?  // Base64 signature image
+  role      String   @default("USER") // "ADMIN", "USER"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reports   ServiceReport[]
+}
+
+model ServiceReport {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  siteName      String    // Şantiye Adı
+  siteColor     String?   // Şantiye Rengi (Hex code)
+  
+  startDate     DateTime
+  endDate       DateTime
+  
+  // Storing as JSON string or comma separated for simplicity in SQLite 
+  // or a relation if we want to be strict, but simpler is better here.
+  // We'll trust the app to handle the JSON array of excluded dates.
+  // We'll trust the app to handle the JSON array of excluded dates.
+  excludedDates String?   // JSON string: ["2026-01-01", "2026-01-02"]
+  holidays      String?   // JSON string: ["2026-04-23", "2026-05-19"]
+  
+  summaryNotes  String?
+
+  workerSignature String? // Base64 or path to image
+
+  totalWorkingDays Int       @default(0)
+  extraTime50      Float     @default(0)
+  extraTime100     Float     @default(0)
+  holidayTime100   Float     @default(0)
+
+  advances      Advance[]
+  expenses      Expense[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Advance {
+  id        String        @id @default(cuid())
+  reportId  String
+  report    ServiceReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  amount    Float
+  currency  String        // "TL", "USD", "EUR"
+  note      String?
+}
+
+model Expense {
+  id          String        @id @default(cuid())
+  reportId    String
+  report      ServiceReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  amount      Float
+  currency    String        // "TL", "USD", "EUR"
+  description String
+}
+
+model OfficialHoliday {
+  id          String   @id @default(cuid())
+  date        DateTime @unique
+  description String
+  isHalfDay   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

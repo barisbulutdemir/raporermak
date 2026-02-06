@@ -1,0 +1,228 @@
+
+> temp_app@0.1.0 build
+> next build
+
+ÔÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Baris\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Baris\Desktop\ermakRaporapp\package-lock.json
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 7 errors:
+./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx:5:1
+Module not found: Can't resolve '@hookform/resolvers/zod'
+  3 | import { useState, useTransition, useRef } from 'react'
+  4 | import { useForm, useFieldArray } from 'react-hook-form'
+> 5 | import { zodResolver } from '@hookform/resolvers/zod'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { z } from 'zod'
+  7 | import { createReport } from '@/app/actions/report'
+  8 | import { Button } from "@/components/ui/button"
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/button.tsx:3:1
+Module not found: Can't resolve 'radix-ui'
+  1 | import * as React from "react"
+  2 | import { cva, type VariantProps } from "class-variance-authority"
+> 3 | import { Slot } from "radix-ui"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | import { cn } from "@/lib/utils"
+  6 |
+
+
+
+Import traces:
+  Server Component:
+    ./Desktop/ermakRaporapp/src/components/ui/button.tsx
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/[id]/page.tsx
+
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/button.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/button.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/form.tsx:5:1
+Module not found: Can't resolve 'radix-ui'
+  3 | import * as React from "react"
+  4 | import type { Label as LabelPrimitive } from "radix-ui"
+> 5 | import { Slot } from "radix-ui"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Controller,
+  8 |   FormProvider,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/form.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/form.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/label.tsx:4:1
+Module not found: Can't resolve 'radix-ui'
+  2 |
+  3 | import * as React from "react"
+> 4 | import { Label as LabelPrimitive } from "radix-ui"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | import { cn } from "@/lib/utils"
+  7 |
+
+
+
+Import traces:
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/label.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/label.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/app/(auth)/login/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/popover.tsx:4:1
+Module not found: Can't resolve 'radix-ui'
+  2 |
+  3 | import * as React from "react"
+> 4 | import { Popover as PopoverPrimitive } from "radix-ui"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | import { cn } from "@/lib/utils"
+  7 |
+
+
+
+Import traces:
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/popover.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/popover.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/select.tsx:5:1
+Module not found: Can't resolve 'radix-ui'
+  3 | import * as React from "react"
+  4 | import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+> 5 | import { Select as SelectPrimitive } from "radix-ui"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 |
+  7 | import { cn } from "@/lib/utils"
+  8 |
+
+
+
+Import traces:
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/select.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/select.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Desktop/ermakRaporapp/src/components/ui/calendar.tsx:9:1
+Module not found: Can't resolve 'react-day-picker'
+   7 |   ChevronRightIcon,
+   8 | } from "lucide-react"
+>  9 | import {
+     | ^^^^^^^^
+> 10 |   DayPicker,
+     | ^^^^^^^^^^^^
+> 11 |   getDefaultClassNames,
+     | ^^^^^^^^^^^^
+> 12 |   type DayButton,
+     | ^^^^^^^^^^^^
+> 13 | } from "react-day-picker"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  14 |
+  15 | import { cn } from "@/lib/utils"
+  16 | import { Button, buttonVariants } from "@/components/ui/button"
+
+
+
+Import traces:
+  Client Component Browser:
+    ./Desktop/ermakRaporapp/src/components/ui/calendar.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component Browser]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./Desktop/ermakRaporapp/src/components/ui/calendar.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Client Component SSR]
+    ./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx [Server Component]
+    ./Desktop/ermakRaporapp/src/app/(dashboard)/reports/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./Desktop/ermakRaporapp/src/components/custom/ReportForm.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/button.tsx:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/form.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/label.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/popover.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/select.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Desktop/ermakRaporapp/src/components/ui/calendar.tsx:9:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
