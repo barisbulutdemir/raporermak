@@ -7,8 +7,10 @@ import {
     FilePlus,
     LogOut,
     User as UserIcon,
-    Settings
+    Settings,
+    Menu
 } from "lucide-react"
+import { MobileNav } from "@/components/custom/MobileNav"
 
 export default async function DashboardLayout({
     children,
@@ -22,6 +24,10 @@ export default async function DashboardLayout({
 
     return (
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
+            {/* Mobile Navigation */}
+            <MobileNav userName={session.user.name || ''} />
+
+            {/* Desktop Sidebar */}
             <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex sm:w-64 transition-all">
                 <div className="flex items-center gap-2 border-b px-4 py-4 h-[60px]">
                     <span className="font-bold text-lg hidden sm:inline-block">ERMAK Rapor</span>
@@ -69,7 +75,9 @@ export default async function DashboardLayout({
                     </form>
                 </div>
             </aside>
-            <div className="flex flex-col sm:gap-4 sm:pl-64 sm:py-4">
+
+            {/* Main Content */}
+            <div className="flex flex-col sm:gap-4 sm:pl-64 sm:py-4 pt-[60px] sm:pt-4">
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                     {children}
                 </main>

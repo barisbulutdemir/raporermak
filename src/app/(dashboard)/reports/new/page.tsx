@@ -4,12 +4,14 @@ import { prisma } from "@/lib/prisma"
 
 export default async function NewReportPage() {
     const session = await auth()
-    const userName = session?.user?.name || ''
 
-    // Fetch user's saved signature
+    // Fetch user's name and saved signature
     const user = await prisma.user.findUnique({
         where: { username: session?.user?.name || '' },
-        select: { signature: true }
+        select: {
+            name: true,
+            signature: true
+        }
     })
 
     return (
@@ -18,7 +20,7 @@ export default async function NewReportPage() {
                 <h1 className="text-2xl font-semibold">Yeni Servis Raporu Oluştur</h1>
             </div>
             <ReportForm
-                defaultUserName={userName}
+                defaultUserName={user?.name || ''}
                 defaultSignature={user?.signature || undefined}
             />
         </div>
