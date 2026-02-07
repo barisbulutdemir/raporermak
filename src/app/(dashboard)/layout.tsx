@@ -12,6 +12,7 @@ import {
     Users
 } from "lucide-react"
 import { MobileNav } from "@/components/custom/MobileNav"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export default async function DashboardLayout({
     children,
@@ -85,6 +86,9 @@ export default async function DashboardLayout({
                             <span className="hidden sm:inline">Çıkış Yap</span>
                         </Button>
                     </form>
+                </div>
+                <div className="px-4 py-2 border-t flex justify-center">
+                    <ModeToggle />
                 </div>
             </aside>
 

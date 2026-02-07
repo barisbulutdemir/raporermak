@@ -7,6 +7,7 @@ import {
     Settings,
     Users
 } from 'lucide-react'
+import { ModeToggle } from "@/components/mode-toggle"
 
 interface MobileNavProps {
     userName: string
@@ -49,6 +50,9 @@ export function MobileNav({ userName, userRole }: MobileNavProps) {
                         <span className="text-xs">Kullanıcılar</span>
                     </Link>
                 )}
+                <div className="flex items-center">
+                    <ModeToggle />
+                </div>
             </nav>
         </div>
     )
