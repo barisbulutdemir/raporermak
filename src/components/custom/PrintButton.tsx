@@ -30,28 +30,26 @@ export function PrintButton() {
             // Show no-print elements again
             noPrintElements.forEach(el => (el as HTMLElement).style.display = '')
 
-            // Calculate dimensions for A4
+            // Calculate dimensions for A4 width
             const imgWidth = 210 // A4 width in mm
-            const pageHeight = 297 // A4 height in mm
             const imgHeight = (canvas.height * imgWidth) / canvas.width
-            console.log('imgHeight', imgHeight)
 
-            // Create PDF
-            const pdf = new jsPDF('p', 'mm', 'a4')
+            // DEBUG INFO
+            alert(`Sayfa Yüksekliği: ${imgHeight.toFixed(1)}mm (A4: 297mm)`)
+
+            // Create PDF with CUSTOM PAGE SIZE to fit content exactly
+            // This guarantees single page, no matter how long the content is
+            const pdfHeight = imgHeight + 10 // Add 10mm margin just in case
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: [imgWidth, pdfHeight] // Dynamic height!
+            })
+
             const imgData = canvas.toDataURL('image/png')
 
-            // STRICT SCALING: Always fit to page with margin
-            const MAX_HEIGHT = 285 // Leave ~12mm margin at bottom
-
-            if (imgHeight > MAX_HEIGHT) {
-                const scale = MAX_HEIGHT / imgHeight
-                const scaledWidth = imgWidth * scale
-                const scaledHeight = MAX_HEIGHT
-                const xOffset = (imgWidth - scaledWidth) / 2
-                pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight)
-            } else {
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
-            }
+            // Add image at full size since page is sized to fit it
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
 
             // SAFETY: Delete extra pages if any (just in case)
             while (pdf.getNumberOfPages() > 1) {
