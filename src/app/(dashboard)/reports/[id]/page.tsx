@@ -210,7 +210,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
             </div>
 
             {/* Signature and Note */}
-            <div className="flex justify-end mt-8">
+            {/* <div className="flex justify-end mt-8">
                 <div className="text-center w-[200px]">
                     {report.workerSignature ? (
                         <img src={report.workerSignature} alt="İmza" className="max-h-[80px] mx-auto mb-2" />
@@ -219,7 +219,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
                     )}
                     <p className="font-semibold text-sm">{report.user.name}</p>
                 </div>
-            </div>
+            </div> */}
 
             {report.summaryNotes && (
                 <div className="mt-8 border-t pt-4 text-sm">
