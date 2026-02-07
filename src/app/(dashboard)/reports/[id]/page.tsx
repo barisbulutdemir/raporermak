@@ -38,15 +38,25 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
     const printStyles = `
     @media print {
-      @page { margin: 20mm; size: A4; }
-      body { -webkit-print-color-adjust: exact; }
+      @page { 
+        margin: 20mm; 
+        size: A4 portrait;
+      }
+      body { 
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
       .no-print { display: none !important; }
       .print-border { border: 1px solid #000; }
+      html, body {
+        height: auto;
+        overflow: visible;
+      }
     }
   `
 
     return (
-        <div className="max-w-[210mm] mx-auto bg-white p-8 min-h-screen text-black">
+        <div className="max-w-[210mm] mx-auto bg-white p-8 text-black">
             <style>{printStyles}</style>
 
             <div className="flex justify-end gap-2 mb-8 no-print">
