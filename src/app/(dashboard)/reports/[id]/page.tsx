@@ -46,7 +46,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
     const printStyles = `
     @media print {
       @page { 
-        margin: 20mm; 
+        margin: 15mm; 
         size: A4 portrait;
       }
       body { 
@@ -59,11 +59,19 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
         height: auto;
         overflow: visible;
       }
+      * {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .print-container {
+        max-height: 257mm;
+        overflow: hidden;
+      }
     }
   `
 
     return (
-        <div className="max-w-[210mm] mx-auto bg-white p-8 text-black">
+        <div className="max-w-[210mm] mx-auto bg-white p-8 text-black print-container">
             <style>{printStyles}</style>
 
             <div className="flex justify-end gap-2 mb-8 no-print">
