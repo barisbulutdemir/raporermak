@@ -32,7 +32,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                     // Check if user is approved
                     if (!user.approved) {
-                        console.log("User not approved")
                         throw new Error("Your account is pending admin approval.")
                     }
 
@@ -40,7 +39,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     if (passwordsMatch) return user
                 }
 
-                console.log("Invalid credentials")
                 return null
             },
         }),

@@ -85,7 +85,7 @@ const seedHolidaysIfNeeded = async () => {
     // 4 years * ~15 holidays = 60. Using 20 as threshold is safe to trigger update if only basic ones exist.
     // But since we want to force update IS_HALF_DAY, let's just run it. Upsert is fast enough for <100 items.
 
-    console.log("Seeding/Updating holidays...")
+
 
     const holidaysToCreate = []
 
@@ -125,8 +125,7 @@ const seedHolidaysIfNeeded = async () => {
             }
         })
     }
-    console.log("Seeding complete.")
-    console.log("Seeding complete.")
+
 }
 
 import { revalidatePath } from "next/cache"

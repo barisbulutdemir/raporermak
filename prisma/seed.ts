@@ -47,32 +47,35 @@ async function main() {
 
     const admin = await prisma.user.upsert({
         where: { username: 'admin' },
-        update: {},
+        update: {
+            approved: true,
+            approvedBy: 'system',
+            approvedAt: new Date(),
+        },
         create: {
             username: 'admin',
             password: password,
             name: 'Admin User',
             role: 'ADMIN',
+            approved: true,
+            approvedBy: 'system',
+            approvedAt: new Date(),
         },
     })
 
     console.log({ admin })
 
     console.log('Seeding holidays...')
-    // Clear existing to avoid duplicates if re-running without clean DB or just upsert
-    // Upsert is safer. matching by date (assumed unique in schema, wait I added @unique to date? Yes I did)
 
     for (const h of holidays) {
         const dt = new Date(h.date)
-        await prisma.holiday.upsert({
+        await prisma.officialHoliday.upsert({
             where: { date: dt },
             update: { description: h.description },
             create: {
                 date: dt,
                 description: h.description,
-                multiplier: h.description.includes('Yarım Gün') ? 0.5 : 1.0,
-                // Logic: if multiplier is for "Holiday Credit", full day is 1.0 (8 hours), half day 0.5 (4 hours)
-                // Note: The logic for PAY is handled in calculationService, here we just mark how much "holiday" it is.
+                isHalfDay: h.description.includes('Yarım Gün'),
             },
         })
     }
