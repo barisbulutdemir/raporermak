@@ -34,6 +34,7 @@ export function PrintButton() {
             const imgWidth = 210 // A4 width in mm
             const pageHeight = 297 // A4 height in mm
             const imgHeight = (canvas.height * imgWidth) / canvas.width
+            console.log('imgHeight', imgHeight)
 
             // Create PDF
             const pdf = new jsPDF('p', 'mm', 'a4')
