@@ -627,9 +627,9 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
             pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
             heightLeft -= pageHeight
 
-            // Add a small tolerance (e.g., 5mm) to avoid creating a new page for tiny overflows
-            // which often happen due to html2canvas rendering differences
-            const tolerance = 5
+            // Add a larger tolerance (e.g., 20mm - 2cm) to avoid creating a new page for whitespace overflows
+            // The footer has 20mm bottom margin, so anything less than that is likely just empty space
+            const tolerance = 20
             while (heightLeft > tolerance) {
                 position = heightLeft - imgHeight
                 pdf.addPage()
