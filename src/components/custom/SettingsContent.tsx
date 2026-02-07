@@ -16,10 +16,10 @@ export function SettingsContent({ user }: { user: { username: string, name: stri
     const handleProfileSubmit = async (formData: FormData) => {
         const result = await updateUserProfile(formData)
         if (result.success) {
-            toast.success(result.message)
+            toast.success('Profil güncellendi')
             router.refresh()
         } else {
-            toast.error(result.message)
+            toast.error(result.error || 'Profil güncellenemedi')
         }
     }
 
@@ -29,21 +29,21 @@ export function SettingsContent({ user }: { user: { username: string, name: stri
         const result = await updatePassword(formData)
 
         if (result.success) {
-            toast.success(result.message)
+            toast.success('Şifre değiştirildi')
             e.currentTarget.reset()
         } else {
-            toast.error(result.message)
+            toast.error(result.error || 'Şifre değiştirilemedi')
         }
     }
 
     const handleSignatureUpdate = async (signature: string | null) => {
         const result = await updateSignature(signature)
         if (result.success) {
-            toast.success(result.message)
+            toast.success('İmza kaydedildi')
             router.refresh()
         } else {
-            toast.error(result.message)
-            throw new Error(result.message)
+            toast.error(result.error || 'İmza kaydedilirken hata oluştu')
+            throw new Error(result.error)
         }
     }
 

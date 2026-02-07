@@ -232,13 +232,11 @@ export async function updateUserProfile(formData: FormData) {
 }
 
 // Update user signature - self-service
-export async function updateSignature(formData: FormData) {
+export async function updateSignature(signature: string | null) {
     const session = await auth()
     if (!session?.user) {
         return { success: false, error: 'Unauthorized' }
     }
-
-    const signature = formData.get('signature') as string
 
     try {
         await prisma.user.update({
