@@ -627,7 +627,10 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
             pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
             heightLeft -= pageHeight
 
-            while (heightLeft > 0) {
+            // Add a small tolerance (e.g., 5mm) to avoid creating a new page for tiny overflows
+            // which often happen due to html2canvas rendering differences
+            const tolerance = 5
+            while (heightLeft > tolerance) {
                 position = heightLeft - imgHeight
                 pdf.addPage()
                 pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
