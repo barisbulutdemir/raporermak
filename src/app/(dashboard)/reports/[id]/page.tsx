@@ -29,11 +29,18 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
     // Parse DB dates to JS Date objects
     const parsedExcluded = excludedDates.map((d: string) => new Date(d))
 
+    // Transform Prisma holidays to Holiday interface format
+    const holidays = officialHolidays.map(h => ({
+        date: h.date,
+        description: h.description,
+        multiplier: h.isHalfDay ? 0.5 : 1.0
+    }))
+
     const calculation = calculateServiceReport(
         report.startDate,
         report.endDate,
         parsedExcluded,
-        officialHolidays
+        holidays
     )
 
     const printStyles = `
