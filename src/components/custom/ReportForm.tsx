@@ -620,7 +620,16 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
 
             const imgWidth = 210
             const pageHeight = 297
-            const imgHeight = (canvas.height * imgWidth) / canvas.width
+            let imgHeight = (canvas.height * imgWidth) / canvas.width
+
+            // Calculate the total height in mm
+            // If the content is slightly larger than A4 (up to 40mm tolerance), 
+            // force it to fit on one page by scaling down the height
+            // This prevents a blank second page due to minor overflows or margins
+            if (imgHeight > pageHeight && imgHeight < pageHeight + 40) {
+                imgHeight = pageHeight
+            }
+
             let heightLeft = imgHeight
             let position = 0
 
