@@ -40,7 +40,7 @@ export function PrintButton() {
             if (imgHeight > pageHeight) {
                 const scale = pageHeight / imgHeight
                 const scaledWidth = imgWidth * scale
-                const scaledHeight = pageHeight
+                const scaledHeight = pageHeight - 1 // Subtract 1mm to prevent new page due to rounding
                 const xOffset = (imgWidth - scaledWidth) / 2
                 pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight)
             } else {

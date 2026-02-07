@@ -210,7 +210,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
             </div>
 
             {/* Signature and Note */}
-            <div className="flex justify-end mt-auto">
+            <div className="flex justify-end mt-8">
                 <div className="text-center w-[200px]">
                     {report.workerSignature ? (
                         <img src={report.workerSignature} alt="İmza" className="max-h-[80px] mx-auto mb-2" />
@@ -227,12 +227,6 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
                     <p>{report.summaryNotes}</p>
                 </div>
             )}
-
-            {/* Print script injection just in case Button does not work in some contexts? No, button is fine. */}
-            <script dangerouslySetInnerHTML={{
-                __html: `
-        function printReport() { window.print(); }
-      `}} />
         </div>
     )
 }
