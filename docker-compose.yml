@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   ermak-rapor-app:
     container_name: ermak-rapor-app
