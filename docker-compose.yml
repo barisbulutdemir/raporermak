@@ -10,6 +10,8 @@ services:
       - DATABASE_URL=file:/app/prisma/dev.db
       # UNRAID İÇİN ÖNEMLİ: Rastgele en az 32 karakterli bir dizge oluşturun
       - AUTH_SECRET=change_me_to_a_random_string_at_least_32_chars
+      - AUTH_TRUST_HOST=true
+
     volumes:
       # Veritabanının kalıcı olması için:
       - ./prisma:/app/prisma
