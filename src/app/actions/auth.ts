@@ -15,7 +15,7 @@ export async function authenticate(
                 case 'CredentialsSignin':
                     return 'Hatalı kullanıcı adı veya şifre.'
                 default:
-                    return 'Bir sorun oluştu.'
+                    return `Bir sorun oluştu: ${error.type}`
             }
         }
         throw error
