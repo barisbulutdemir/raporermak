@@ -12,7 +12,7 @@ export function SignatureUpload({
     onSignatureUpdate
 }: {
     currentSignature?: string | null
-    onSignatureUpdate: (signature: string | null) => Promise<void>
+    onSignatureUpdate: (signature: string | null) => Promise<any>
 }) {
     const [signature, setSignature] = useState<string | null>(currentSignature || null)
     const [uploading, setUploading] = useState(false)
@@ -33,7 +33,11 @@ export function SignatureUpload({
 
         setUploading(true)
         try {
-            await onSignatureUpdate(signatureData)
+            const result = await onSignatureUpdate(signatureData)
+            if (result && !result.success) {
+                toast.error(result.error || "İmza kaydedilirken hata oluştu")
+                return
+            }
             setSignature(signatureData)
             toast.success("İmza kaydedildi")
         } catch (error) {
@@ -46,7 +50,11 @@ export function SignatureUpload({
     const handleRemove = async () => {
         setUploading(true)
         try {
-            await onSignatureUpdate(null)
+            const result = await onSignatureUpdate(null)
+            if (result && !result.success) {
+                toast.error(result.error || "İmza silinirken hata oluştu")
+                return
+            }
             setSignature(null)
             sigCanvas.current?.clear()
             toast.success("İmza silindi")
