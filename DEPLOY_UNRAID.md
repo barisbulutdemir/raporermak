@@ -31,16 +31,41 @@ En temiz ve yönetilebilir yöntem, Unraid'in **Docker Compose Manager** eklenti
     ```
     *(Bu komutlar mevcut dosyalarınızı güncel GitHub versiyonuyla eşitler).*
 
-### Adım 4: Ayarlar ve Başlatma
-1.  Terminali kapatın.
-2.  Stack ismine (`ermakRaporlama`) tıklayın, ardından **"EDIT STACK"** butonuna basın.
-3.  `Compose File` alanında `docker-compose.yml` içeriğini göreceksiniz.
-    *   **ÖNEMLİ:** `AUTH_SECRET` kısmını rastgele bir şifre ile değiştirin.
+### Adım 4: Stack Ayarlarını Yapıştırın (Önemli!)
+
+Unraid, Stack dosyalarını USB bellekte (/boot) tutar. Ancak bizim kodlarımız diskte (/mnt/user/appdata).
+Bu yüzden Stack ayarlarında **Tam Yol (Absolute Path)** kullanmalıyız.
+
+1.  Stack ismine (`ermakRaporlama`) tıklayın, ardından **"EDIT STACK"** butonuna basın.
+2.  `Compose File` kutusundaki her şeyi silin ve aşağıdakini yapıştırın:
+
+    ```yaml
+    version: '3.8'
+
+    services:
+      ermak-rapor-app:
+        # Kodların olduğu klasör (Diskteki yer):
+        build: /mnt/user/appdata/ermakRaporlama
+        container_name: ermak-rapor-app
+        restart: unless-stopped
+        ports:
+          - "3000:3000"
+        environment:
+          - NODE_ENV=production
+          - DATABASE_URL=file:/app/prisma/dev.db
+          # Şifrenizi buraya yazın:
+          - AUTH_SECRET=BURAYA_OPENSSL_ILE_URETTIGINIZ_SIFREYI_YAZIN
+        volumes:
+          # Veritabanı ve Uploads klasörleri de diskte tutulmalı:
+          - /mnt/user/appdata/ermakRaporlama/prisma:/app/prisma
+          - /mnt/user/appdata/ermakRaporlama/public/uploads:/app/public/uploads
+    ```
+
+3.  `AUTH_SECRET` kısmını değiştirmeyi unutmayın!
 4.  **"SAVE CHANGES"** butonuna basın.
 5.  Son olarak **"COMPOSE UP"** butonuna tıklayın.
 
-Docker imajı oluşturulacak (Build) ve proje ayağa kalkacaktır.
-Uygulamanıza `http://UNRAID_IP_ADRESI:3000` adresinden erişebilirsiniz.
+Docker, `/mnt/user/appdata/ermakRaporlama` klasöründeki kodları kullanarak imajı oluşturacak ve USB belleğinizi doldurmadan çalışacaktır.
 
 ---
 
