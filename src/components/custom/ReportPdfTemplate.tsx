@@ -67,7 +67,7 @@ export const ReportPdfTemplate: React.FC<ReportPdfTemplateProps> = ({ data, spec
 
                 {/* Site Name */}
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '16pt', width: '40%' }}>
-                    {data.siteName}
+                    {data.siteName} Servis Raporu
                 </div>
 
                 {/* Date */}
@@ -88,6 +88,7 @@ export const ReportPdfTemplate: React.FC<ReportPdfTemplateProps> = ({ data, spec
                 )}
 
                 {/* Expenses */}
+                {/* Expenses */}
                 {data.expenses && data.expenses.length > 0 && (
                     <div>
                         <div style={{ fontWeight: 'bold', fontSize: '12pt', marginBottom: '5px' }}>Harcamalar:</div>
@@ -98,6 +99,18 @@ export const ReportPdfTemplate: React.FC<ReportPdfTemplateProps> = ({ data, spec
                                 </li>
                             ))}
                         </ul>
+                        {/* Calculate and display totals */}
+                        <div style={{ fontWeight: 'bold', marginTop: '5px', paddingLeft: '10px', fontSize: '12pt' }}>
+                            Toplam: {
+                                (() => {
+                                    const totals = data.expenses.reduce((acc: any, curr: any) => {
+                                        acc[curr.currency] = (acc[curr.currency] || 0) + (Number(curr.amount) || 0)
+                                        return acc
+                                    }, {} as Record<string, number>)
+                                    return Object.entries(totals).map(([c, a]) => `${a} ${c}`).join(' + ')
+                                })()
+                            }
+                        </div>
                     </div>
                 )}
 

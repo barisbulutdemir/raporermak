@@ -550,7 +550,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
             document.body.removeChild(iframe)
 
             const blob = pdf.output('blob')
-            return new File([blob], `servis-raporu-${format(new Date(), 'dd-MM-yyyy')}.pdf`, { type: 'application/pdf' })
+            const cleanSiteName = data.siteName ? data.siteName.replace(/[^a-zA-Z0-9 öçşğüİıÖÇŞĞÜ\-\.]/g, '').trim() : 'Servis'
+            return new File([blob], `${cleanSiteName} Servis Raporu.pdf`, { type: 'application/pdf' })
         } catch (error) {
             console.error("PDF generation error", error)
             return null
@@ -704,7 +705,8 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                 heightLeft -= pageHeight
             }
 
-            pdf.save(`servis-raporu-${format(new Date(), 'dd-MM-yyyy')}.pdf`)
+            const cleanSiteName = data.siteName ? data.siteName.replace(/[^a-zA-Z0-9 öçşğüİıÖÇŞĞÜ\-\.]/g, '').trim() : 'Servis'
+            pdf.save(`${cleanSiteName} Servis Raporu.pdf`)
             toast.success("PDF indirildi")
 
             document.body.removeChild(iframe)
@@ -1683,7 +1685,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                                     <FileText className="w-4 h-4 text-blue-600" />
                                                 </div>
                                                 <div className="flex flex-col min-w-0">
-                                                    <a href={file.filePath} target="_blank" rel="noopener noreferrer" className="text-sm font-medium truncate hover:underline hover:text-blue-600">
+                                                    <a href={file.filePath} download={file.fileName} target="_blank" rel="noopener noreferrer" className="text-sm font-medium truncate hover:underline hover:text-blue-600">
                                                         {file.fileName}
                                                     </a>
                                                     <span className="text-xs text-muted-foreground">Kaydedilmiş</span>
@@ -1761,7 +1763,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                         Toplam: {
                                             (() => {
                                                 const totals = form.watch('expenses').reduce((acc, curr) => {
-                                                    acc[curr.currency] = (acc[curr.currency] || 0) + curr.amount
+                                                    acc[curr.currency] = (acc[curr.currency] || 0) + Number(curr.amount)
                                                     return acc
                                                 }, {} as Record<string, number>)
                                                 return Object.entries(totals).map(([c, a]) => `${a} ${c}`).join(' + ')
@@ -1864,7 +1866,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                         <span className="text-xs text-muted-foreground">Ek Dosya</span>
                                     </div>
                                 </div>
-                                <a href={att.filePath} download target="_blank" rel="noopener noreferrer">
+                                <a href={att.filePath} download={att.fileName} target="_blank" rel="noopener noreferrer">
                                     <Button variant="outline" size="sm">
                                         <Download className="w-4 h-4 mr-2" /> İndir
                                     </Button>

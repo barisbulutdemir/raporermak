@@ -2,6 +2,7 @@ import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect, notFound } from 'next/navigation'
 import { ReportForm } from '@/components/custom/ReportForm'
+import { DeleteReportButton } from '@/components/custom/DeleteReportButton'
 
 export default async function EditReportPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await auth()
@@ -25,9 +26,6 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
         notFound()
     }
 
-    // Security: Only allow owner/admin to edit? 
-    // Usually good practice. For now, assume dashboard access implies permission or rely on session check.
-
     // Parse JSON fields because Prisma returns them as strings (custom schema choice)
     const parsedReport = {
         ...report,
@@ -37,7 +35,10 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
 
     return (
         <div className="container mx-auto py-6 space-y-6">
-            <h1 className="text-2xl font-bold">Raporu Düzenle</h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">Raporu Düzenle</h1>
+                <DeleteReportButton reportId={report.id} />
+            </div>
             <ReportForm
                 initialData={parsedReport}
                 reportId={report.id}

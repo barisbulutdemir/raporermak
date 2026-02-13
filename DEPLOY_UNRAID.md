@@ -18,10 +18,10 @@ Aşağıdaki komutları sırasıyla terminale yapıştırın:
     ```
 
 2.  **Projeyi İndir (Clone):**
-    *(Aşağıdaki adresi kendi github adresinizle değiştirin!)*
+    *(Aşağıdaki adresi kendi GitHub kullanıcı adınızla değiştirin, şimdilik:)*
     ```bash
-    git clone https://github.com/KULLANICI_ADI/ermakRaporapp.git
-    cd ermakRaporapp
+    git clone https://github.com/barisbulutdemir/ermakRaporlama.git
+    cd ermakRaporlama
     ```
 
 3.  **Başlat:**
@@ -40,24 +40,27 @@ Bilgisayarınızda değişiklik yapıp GitHub'a gönderdikten sonra, Unraid term
 
 1.  Klasöre girin:
     ```bash
-    cd /mnt/user/appdata/ermakRaporapp
+    cd /mnt/user/appdata/ermakRaporlama
     ```
 2.  Kodları çekin:
     ```bash
     git pull
     ```
-    git pull
+3.  Yeniden oluşturun (build):
+    ```bash
+    docker-compose up -d --build
     ```
 4.  Veritabanını Güncelleyin (Önemli!):
     ```bash
     docker-compose exec ermak-rapor-app npx prisma migrate deploy
     ```
-5.  Yeniden başlatın (Eğer gerekirse):
-    ```bash
-    docker-compose up -d --build
-    ```
 
 ## Önemli Notlar
 
 *   **Veritabanı:** Verileriniz (`prisma` klasörü) ve Resimler (`uploads` klasörü) bu klasörün içinde güvende kalır. Güncelleme yapsanız bile silinmez.
+*   **Gizli Anahtar (Auth Secret):** `docker-compose.yml` dosyasındaki `AUTH_SECRET` değerini değiştirmeniz önerilir. Rastgele bir değer oluşturmak için terminalde şu komutu çalıştırabilirsiniz:
+    ```bash
+    openssl rand -base64 32
+    ```
 *   **Port:** Eğer 3000 portu doluysa `docker-compose.yml` dosyasını açıp değiştirebilirsiniz (`nano docker-compose.yml`).
+

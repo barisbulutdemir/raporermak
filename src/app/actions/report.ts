@@ -207,3 +207,27 @@ export async function deleteReport(reportId: string) {
         return { success: false, message: 'Failed to delete report' }
     }
 }
+
+export async function deleteReports(reportIds: string[]) {
+    const session = await auth()
+    if (!session?.user) return { message: 'Unauthorized' }
+
+    if (!reportIds || reportIds.length === 0) {
+        return { success: false, message: 'No reports selected' }
+    }
+
+    try {
+        await prisma.serviceReport.deleteMany({
+            where: {
+                id: { in: reportIds },
+                user: { username: session.user.name ?? undefined }
+            }
+        })
+        revalidatePath('/dashboard')
+        revalidatePath('/reports')
+        return { success: true }
+    } catch (error) {
+        console.error("Failed to delete reports", error)
+        return { success: false, message: 'Failed to delete reports' }
+    }
+}
