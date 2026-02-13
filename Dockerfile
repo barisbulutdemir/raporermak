@@ -22,6 +22,8 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+ENV DATABASE_URL="file:/app/prisma/dev.db"
+
 # Generate Prisma Client
 RUN npx prisma generate
 
