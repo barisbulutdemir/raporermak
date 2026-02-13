@@ -58,7 +58,7 @@ interface HolidayManagementProps {
 
 const formSchema = z.object({
     description: z.string().min(2, "Tatil adı en az 2 karakter olmalıdır."),
-    date: z.date({ required_error: "Tarih seçilmelidir." }),
+    date: z.date({ message: "Tarih seçilmelidir." }),
     isHalfDay: z.boolean().default(false),
 })
 
