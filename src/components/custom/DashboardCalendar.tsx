@@ -139,10 +139,10 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                             const isToday = isSameDay(date, new Date())
 
                             return (
-                                <CalendarDayButton {...props}>
+                                <CalendarDayButton {...props} className="relative">
                                     {/* Date Number */}
                                     <span className={cn(
-                                        "text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center transition-all",
+                                        "text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center transition-all z-10",
                                         isToday ? "bg-primary text-primary-foreground" : "text-foreground"
                                     )}>
                                         {format(date, 'd')}
@@ -151,7 +151,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                     {/* Colored Dot/Bar if Report Exists (Compact) */}
                                     {report && (
                                         <div
-                                            className="w-full max-w-[90%] h-1.5 rounded-full shadow-sm"
+                                            className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full shadow-sm"
                                             style={{ backgroundColor: report.siteColor || '#3b82f6' }}
                                         />
                                     )}
