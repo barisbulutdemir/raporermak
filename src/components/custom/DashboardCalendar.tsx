@@ -139,21 +139,26 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                             const isToday = isSameDay(date, new Date())
 
                             return (
-                                <CalendarDayButton {...props} className="relative">
+                                <CalendarDayButton
+                                    {...props}
+                                    className="relative flex flex-col items-center justify-center w-full h-full p-0"
+                                >
                                     {/* Date Number */}
                                     <span className={cn(
-                                        "text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center transition-all z-10",
+                                        "text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center z-10 leading-none",
                                         isToday ? "bg-primary text-primary-foreground" : "text-foreground"
                                     )}>
                                         {format(date, 'd')}
                                     </span>
 
-                                    {/* Colored Dot/Bar if Report Exists (Compact) */}
-                                    {report && (
+                                    {/* Colored dot below number */}
+                                    {report ? (
                                         <div
-                                            className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full shadow-sm"
+                                            className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full shadow-sm"
                                             style={{ backgroundColor: report.siteColor || '#3b82f6' }}
                                         />
+                                    ) : (
+                                        <div className="absolute bottom-0.5 w-1.5 h-1.5" />
                                     )}
                                 </CalendarDayButton>
                             )
