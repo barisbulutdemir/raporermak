@@ -58,6 +58,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy prisma schema and migrations for production usage if needed (e.g. for migrate deploy)
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# Copy startup migration script and entrypoint
+COPY --chown=nextjs:nodejs prisma-push.js ./prisma-push.js
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 USER nextjs
 
@@ -68,4 +72,4 @@ ENV PORT 3000
 # We will override this in docker-compose, but setting a default here for clarity
 ENV DATABASE_URL="file:/app/prisma/dev.db"
 
-CMD ["node", "server.js"]
+CMD ["/docker-entrypoint.sh"]
