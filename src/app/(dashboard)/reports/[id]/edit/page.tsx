@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { redirect, notFound } from 'next/navigation'
 import { ReportForm } from '@/components/custom/ReportForm'
 import { DeleteReportButton } from '@/components/custom/DeleteReportButton'
+import { getExchangeRates } from '@/app/actions/exchangeRates'
 
 export default async function EditReportPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await auth()
@@ -31,6 +32,9 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
         notFound()
     }
 
+    // Fetch exchange rates for the report's start date (cached 24h)
+    const exchangeRates = await getExchangeRates(report.startDate).catch(() => null)
+
     // Parse JSON fields because Prisma returns them as strings (custom schema choice)
     const parsedReport = {
         ...report,
@@ -49,6 +53,7 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
                 reportId={report.id}
                 defaultUserName={session.user.name || ''}
                 monthlySalary={report.user.monthlySalary}
+                exchangeRates={exchangeRates}
             />
         </div>
     )

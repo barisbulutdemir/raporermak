@@ -69,9 +69,10 @@ export interface ReportFormProps {
     defaultUserName?: string
     defaultSignature?: string
     monthlySalary?: number | null
+    exchangeRates?: { USD: number; EUR: number; date: string } | null
 }
 
-export function ReportForm({ initialData, reportId, defaultUserName, defaultSignature, monthlySalary }: ReportFormProps) {
+export function ReportForm({ initialData, reportId, defaultUserName, defaultSignature, monthlySalary, exchangeRates }: ReportFormProps) {
     const [isPending, startTransition] = useTransition()
     const [createdReportId, setCreatedReportId] = useState<string | null>(null)
 
@@ -356,6 +357,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
     const watchExtraTime50 = useWatch({ control: form.control, name: 'extraTime50' })
     const watchExtraTime100 = useWatch({ control: form.control, name: 'extraTime100' })
     const watchHolidayTime100 = useWatch({ control: form.control, name: 'holidayTime100' })
+    const watchExpenses = useWatch({ control: form.control, name: 'expenses' })
 
     const fees = useMemo(() => {
         return calculateServiceFees(
@@ -366,6 +368,19 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
             watchHolidayTime100 || 0
         )
     }, [monthlySalary, watchTotalWorkingDays, watchExtraTime50, watchExtraTime100, watchHolidayTime100])
+
+    // Total expenses converted to TL
+    const totalExpensesTL = useMemo(() => {
+        if (!watchExpenses || watchExpenses.length === 0) return 0
+        return watchExpenses.reduce((sum: number, exp: any) => {
+            const amount = parseFloat(exp.amount) || 0
+            if (exp.currency === 'USD' && exchangeRates?.USD) return sum + amount * exchangeRates.USD
+            if (exp.currency === 'EUR' && exchangeRates?.EUR) return sum + amount * exchangeRates.EUR
+            return sum + amount // TL
+        }, 0)
+    }, [watchExpenses, exchangeRates])
+
+    const netReceivable = fees.totalServiceFee - totalExpensesTL
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -1852,10 +1867,16 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                 Hizmet Bedeli Hesaplaması
                             </CardTitle>
                             <CardDescription>
-                                Maaş bazlı otomatik hesaplanan servis ücretleri (PDF&apos;te görünmez).
+                                Maaş bazlı hesaplama (PDF&apos;te görünmez)
+                                {exchangeRates && (
+                                    <span className="ml-2 text-xs">
+                                        · Kur ({exchangeRates.date}): 1 USD = {formatCurrency(exchangeRates.USD)} · 1 EUR = {formatCurrency(exchangeRates.EUR)}
+                                    </span>
+                                )}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            {/* Base rates */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                                 <div className="space-y-1">
                                     <span className="text-muted-foreground block">Aylık Maaş</span>
@@ -1871,7 +1892,9 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                 </div>
                             </div>
 
+                            {/* Earned breakdown */}
                             <div className="space-y-2 border-t pt-3">
+                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Hak Edilen</p>
                                 <div className="flex justify-between items-center text-sm">
                                     <span>Hafta İçi ({watchTotalWorkingDays} gün × {formatCurrency(fees.dailyServiceFee)})</span>
                                     <span className="font-medium">{formatCurrency(fees.standardServiceFee)}</span>
@@ -1884,7 +1907,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                 )}
                                 {fees.sundayServiceFee > 0 && (
                                     <div className="flex justify-between items-center text-sm">
-                                        <span>Pazar / Resmi Tatil ({watchExtraTime100} saat &times; 2.0x)</span>
+                                        <span>Pazar ({watchExtraTime100} saat &times; 2.0x)</span>
                                         <span className="font-medium">{formatCurrency(fees.sundayServiceFee)}</span>
                                     </div>
                                 )}
@@ -1894,10 +1917,47 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                         <span className="font-medium">{formatCurrency(fees.holidayServiceFee)}</span>
                                     </div>
                                 )}
-                                <div className="flex justify-between items-center pt-2 border-t font-bold text-lg text-blue-700 dark:text-blue-400">
-                                    <span>Toplam Hizmet Bedeli</span>
-                                    <span>{formatCurrency(fees.totalServiceFee)}</span>
+                                <div className="flex justify-between items-center pt-2 border-t font-bold text-base">
+                                    <span>Hak Edilen Toplam</span>
+                                    <span className="text-blue-700 dark:text-blue-400">{formatCurrency(fees.totalServiceFee)}</span>
                                 </div>
+                            </div>
+
+                            {/* Expenses breakdown */}
+                            {watchExpenses && watchExpenses.length > 0 && (
+                                <div className="space-y-2 border-t pt-3">
+                                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Masraflar</p>
+                                    {watchExpenses.map((exp: any, idx: number) => {
+                                        const amount = parseFloat(exp.amount) || 0
+                                        let amountTL = amount
+                                        let rateNote = ''
+                                        if (exp.currency === 'USD' && exchangeRates?.USD) {
+                                            amountTL = amount * exchangeRates.USD
+                                            rateNote = ` (${amount} USD × ${exchangeRates.USD.toFixed(2)})`
+                                        } else if (exp.currency === 'EUR' && exchangeRates?.EUR) {
+                                            amountTL = amount * exchangeRates.EUR
+                                            rateNote = ` (${amount} EUR × ${exchangeRates.EUR.toFixed(2)})`
+                                        }
+                                        return (
+                                            <div key={idx} className="flex justify-between items-center text-sm">
+                                                <span className="truncate max-w-[60%]">{exp.description || 'Masraf'}{rateNote}</span>
+                                                <span className="font-medium text-red-600">- {formatCurrency(amountTL)}</span>
+                                            </div>
+                                        )
+                                    })}
+                                    <div className="flex justify-between items-center pt-1 text-sm font-semibold text-red-600">
+                                        <span>Toplam Masraf</span>
+                                        <span>- {formatCurrency(totalExpensesTL)}</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Net receivable */}
+                            <div className="flex justify-between items-center pt-3 border-t-2 border-blue-300 dark:border-blue-700">
+                                <span className="font-bold text-lg">Alınacak Tutar</span>
+                                <span className={`font-bold text-xl ${netReceivable >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    {formatCurrency(netReceivable)}
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
