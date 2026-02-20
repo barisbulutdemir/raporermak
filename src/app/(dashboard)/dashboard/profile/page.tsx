@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { SignatureUpload } from "@/components/custom/SignatureUpload"
 import { Separator } from "@/components/ui/separator"
 import { updateSignature } from "@/app/actions/user"
+import { SalaryInput } from "@/components/custom/SalaryInput"
 
 export default async function ProfilePage() {
     const session = await auth()
@@ -18,7 +19,8 @@ export default async function ProfilePage() {
             name: true,
             username: true,
             role: true,
-            signature: true
+            signature: true,
+            monthlySalary: true
         }
     })
 
@@ -49,6 +51,13 @@ export default async function ProfilePage() {
                     <div className="space-y-2">
                         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Rol</label>
                         <div className="p-3 border rounded-md bg-muted text-sm">{user.role}</div>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Aylık Maaş</label>
+                        <SalaryInput initialSalary={user.monthlySalary} />
+                        <p className="text-xs text-muted-foreground">
+                            Servis ücreti hesaplamaları için kullanılır.
+                        </p>
                     </div>
                 </div>
 

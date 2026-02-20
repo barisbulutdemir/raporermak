@@ -16,8 +16,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Calendar } from "@/components/ui/calendar"
 import { format, eachDayOfInterval, isSameDay } from "date-fns"
 import { tr } from "date-fns/locale"
-import { Trash2, PlusCircle, Check, Upload, X, Share2, FileText, Download } from "lucide-react"
+import { Trash2, PlusCircle, Check, Upload, X, Share2, FileText, Download, Calculator } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { calculateServiceFees, formatCurrency } from "@/lib/calculations"
 import { Textarea } from "@/components/ui/textarea"
 import {
     Select,
@@ -67,9 +68,10 @@ export interface ReportFormProps {
     reportId?: string
     defaultUserName?: string
     defaultSignature?: string
+    monthlySalary?: number | null
 }
 
-export function ReportForm({ initialData, reportId, defaultUserName, defaultSignature }: ReportFormProps) {
+export function ReportForm({ initialData, reportId, defaultUserName, defaultSignature, monthlySalary }: ReportFormProps) {
     const [isPending, startTransition] = useTransition()
     const [createdReportId, setCreatedReportId] = useState<string | null>(null)
 
@@ -348,6 +350,22 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
     // Attachments State
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [existingAttachments, setExistingAttachments] = useState<any[]>(initialData?.attachments || [])
+
+    // Watch values for service fee calculation
+    const watchTotalWorkingDays = form.watch('totalWorkingDays')
+    const watchExtraTime50 = form.watch('extraTime50')
+    const watchExtraTime100 = form.watch('extraTime100')
+    const watchHolidayTime100 = form.watch('holidayTime100')
+
+    const fees = useMemo(() => {
+        return calculateServiceFees(
+            monthlySalary || 0,
+            watchTotalWorkingDays || 0,
+            watchExtraTime50 || 0,
+            watchExtraTime100 || 0,
+            watchHolidayTime100 || 0
+        )
+    }, [monthlySalary, watchTotalWorkingDays, watchExtraTime50, watchExtraTime100, watchHolidayTime100])
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -1824,6 +1842,66 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* Service Fee Calculation Display */}
+                {monthlySalary && monthlySalary > 0 && (
+                    <Card className="border-blue-200 bg-blue-50/50 dark:bg-blue-950/10">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-lg flex items-center gap-2">
+                                <Calculator className="w-5 h-5 text-blue-600" />
+                                Hizmet Bedeli Hesaplaması
+                            </CardTitle>
+                            <CardDescription>
+                                Maaş bazlı otomatik hesaplanan servis ücretleri (PDF&apos;te görünmez).
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                <div className="space-y-1">
+                                    <span className="text-muted-foreground block">Aylık Maaş</span>
+                                    <span className="font-semibold">{formatCurrency(monthlySalary)}</span>
+                                </div>
+                                <div className="space-y-1">
+                                    <span className="text-muted-foreground block">Günlük Servis Bedeli</span>
+                                    <span className="font-semibold">{formatCurrency(fees.dailyServiceFee)}</span>
+                                </div>
+                                <div className="space-y-1">
+                                    <span className="text-muted-foreground block">Saatlik Ücret</span>
+                                    <span className="font-semibold">{formatCurrency(fees.hourlyRate)}</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 border-t pt-3">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span>Hafta İçi ({watchTotalWorkingDays} gün × {formatCurrency(fees.dailyServiceFee)})</span>
+                                    <span className="font-medium">{formatCurrency(fees.standardServiceFee)}</span>
+                                </div>
+                                {fees.saturdayServiceFee > 0 && (
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span>Cumartesi ({watchExtraTime50} saat &times; 1.5x)</span>
+                                        <span className="font-medium">{formatCurrency(fees.saturdayServiceFee)}</span>
+                                    </div>
+                                )}
+                                {fees.sundayServiceFee > 0 && (
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span>Pazar / Resmi Tatil ({watchExtraTime100} saat &times; 2.0x)</span>
+                                        <span className="font-medium">{formatCurrency(fees.sundayServiceFee)}</span>
+                                    </div>
+                                )}
+                                {fees.holidayServiceFee > 0 && (
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span>Resmi Tatil Fazla ({watchHolidayTime100} saat &times; 2.0x)</span>
+                                        <span className="font-medium">{formatCurrency(fees.holidayServiceFee)}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between items-center pt-2 border-t font-bold text-lg text-blue-700 dark:text-blue-400">
+                                    <span>Toplam Hizmet Bedeli</span>
+                                    <span>{formatCurrency(fees.totalServiceFee)}</span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <Button type="submit" size="lg" className="w-full" disabled={isPending}>
                     {isPending ? 'Oluşturuluyor...' : 'Raporu Kaydet'}

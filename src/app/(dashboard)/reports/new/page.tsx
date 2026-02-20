@@ -1,7 +1,7 @@
 import { ReportForm } from "@/components/custom/ReportForm"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { SignatureCheckDialog } from "@/components/custom/SignatureCheckDialog"
+import { ProfileCompletionDialog } from "@/components/custom/ProfileCompletionDialog"
 
 export default async function NewReportPage() {
     const session = await auth()
@@ -11,13 +11,14 @@ export default async function NewReportPage() {
         where: { username: session?.user?.name || '' },
         select: {
             name: true,
-            signature: true
+            signature: true,
+            monthlySalary: true
         }
     })
 
     return (
         <div className="mx-auto grid w-full max-w-[900px] gap-6">
-            <SignatureCheckDialog hasSignature={!!user?.signature} />
+            <ProfileCompletionDialog hasSignature={!!user?.signature} hasSalary={!!user?.monthlySalary} />
             <div className="flex items-center gap-4">
                 <h1 className="text-2xl font-semibold">Yeni Servis Raporu Oluştur</h1>
             </div>

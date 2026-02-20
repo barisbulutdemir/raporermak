@@ -14,6 +14,8 @@ model User {
   password    String
   name        String?
   signature   String?   // Base64 signature image
+  monthlySalary Float?  // Monthly salary for fee calculation
+
   role        String    @default("USER") // "ADMIN", "USER"
   approved    Boolean   @default(false)
   isActive    Boolean   @default(true)  // New: For soft delete / passive mode

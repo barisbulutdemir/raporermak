@@ -240,8 +240,31 @@ export async function updateUserProfile(formData: FormData) {
     }
 }
 
+// Update user salary - self-service
+export async function updateSalary(salary: number | null) {
+    const session = await auth()
+    if (!session?.user) {
+        return { success: false, error: 'Unauthorized' }
+    }
+
+    try {
+        await prisma.user.update({
+            where: { username: session.user.username },
+            data: { monthlySalary: salary },
+        })
+
+        revalidatePath('/settings')
+        revalidatePath('/dashboard/profile')
+        return { success: true }
+    } catch (error) {
+        console.error('Error updating salary:', error)
+        return { success: false, error: 'Failed to update salary' }
+    }
+}
+
 // Update user signature - self-service
 export async function updateSignature(signature: string | null) {
+
     const session = await auth()
     if (!session?.user) {
         return { success: false, error: 'Unauthorized' }

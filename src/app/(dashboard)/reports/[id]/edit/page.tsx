@@ -17,7 +17,12 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
         include: {
             advances: true,
             expenses: true,
-            user: true,
+            user: {
+                select: {
+                    name: true,
+                    monthlySalary: true
+                }
+            },
             attachments: true
         }
     })
@@ -43,6 +48,7 @@ export default async function EditReportPage({ params }: { params: Promise<{ id:
                 initialData={parsedReport}
                 reportId={report.id}
                 defaultUserName={session.user.name || ''}
+                monthlySalary={report.user.monthlySalary}
             />
         </div>
     )
