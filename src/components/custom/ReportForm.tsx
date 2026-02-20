@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition, useEffect, useMemo } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
@@ -352,10 +352,10 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
     const [existingAttachments, setExistingAttachments] = useState<any[]>(initialData?.attachments || [])
 
     // Watch values for service fee calculation
-    const watchTotalWorkingDays = form.watch('totalWorkingDays')
-    const watchExtraTime50 = form.watch('extraTime50')
-    const watchExtraTime100 = form.watch('extraTime100')
-    const watchHolidayTime100 = form.watch('holidayTime100')
+    const watchTotalWorkingDays = useWatch({ control: form.control, name: 'totalWorkingDays' })
+    const watchExtraTime50 = useWatch({ control: form.control, name: 'extraTime50' })
+    const watchExtraTime100 = useWatch({ control: form.control, name: 'extraTime100' })
+    const watchHolidayTime100 = useWatch({ control: form.control, name: 'holidayTime100' })
 
     const fees = useMemo(() => {
         return calculateServiceFees(
