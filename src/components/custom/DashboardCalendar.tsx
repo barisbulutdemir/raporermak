@@ -119,16 +119,16 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="p-2 border rounded-md w-full">
+            <div className="p-1 sm:p-2 border rounded-md w-full max-w-full overflow-x-auto">
                 <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     locale={tr}
-                    className="rounded-md border p-2 w-full flex justify-center"
+                    className="rounded-md border p-1 sm:p-2 w-full flex justify-center min-w-min"
                     modifiers={reportModifiers}
                     modifiersStyles={{
-                        selected: { backgroundColor: 'transparent', border: '2px solid var(--primary)', borderRadius: '100%' },
+                        selected: { backgroundColor: 'transparent', boxShadow: 'inset 0 0 0 2px var(--primary)', borderRadius: '100%' },
                         ...reportModifiersStyles
                     }}
                     components={{
@@ -145,7 +145,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                 >
                                     {/* Date Number */}
                                     <span className={cn(
-                                        "text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center z-10 leading-none",
+                                        "text-xs sm:text-sm font-semibold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center z-10 leading-none shrink-0",
                                         isToday ? "bg-primary text-primary-foreground" : "text-foreground"
                                     )}>
                                         {format(date, 'd')}
@@ -154,11 +154,11 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                     {/* Colored dot below number */}
                                     {report ? (
                                         <div
-                                            className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full shadow-sm"
+                                            className="absolute bottom-0 sm:bottom-0.5 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full shadow-sm"
                                             style={{ backgroundColor: report.siteColor || '#3b82f6' }}
                                         />
                                     ) : (
-                                        <div className="absolute bottom-0.5 w-1.5 h-1.5" />
+                                        <div className="absolute bottom-0 sm:bottom-0.5 w-1 sm:w-1.5 h-1 sm:h-1.5" />
                                     )}
                                 </CalendarDayButton>
                             )
