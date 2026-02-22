@@ -128,30 +128,35 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                     className="rounded-md border p-1 sm:p-2 w-full flex justify-center min-w-min"
                     modifiers={reportModifiers}
                     modifiersStyles={{
-                        selected: { backgroundColor: 'transparent', boxShadow: 'inset 0 0 0 2px var(--primary)', borderRadius: '100%' },
                         ...reportModifiersStyles
                     }}
                     components={{
-                        DayButton: (props) => {
-                            const { day } = props
-                            const date = day.date
+                        Day: ({ date, displayMonth }: any) => {
                             const report = getReportForDay(date)
                             const isToday = isSameDay(date, new Date())
+                            const isSelected = selectedDate && isSameDay(date, selectedDate)
 
-                            return (
+                            // Let's render the day exactly as CalendarDayButton would, but layering our dots inside.
+                            // However, we can hook into `components={{ DayButton }}` instead if we want to keep it simple.
+                            // Actually, let's keep it simple by just providing DayButton replacement that spreads correctly.
+                            return <td className="p-0 text-center relative aspect-square">
                                 <CalendarDayButton
-                                    {...props}
+                                    day={{ date, displayMonth } as any}
+                                    modifiers={{
+                                        selected: isSelected,
+                                        today: isToday,
+                                    } as any}
+                                    onClick={() => setSelectedDate(date)}
                                     className="relative flex flex-col items-center justify-center w-full h-full p-0"
                                 >
-                                    {/* Date Number */}
                                     <span className={cn(
                                         "text-xs sm:text-sm font-semibold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center z-10 leading-none shrink-0",
-                                        isToday ? "bg-primary text-primary-foreground" : "text-foreground"
+                                        isToday ? "bg-primary text-primary-foreground" : "text-foreground",
+                                        isSelected ? "bg-primary text-primary-foreground" : ""
                                     )}>
                                         {format(date, 'd')}
                                     </span>
 
-                                    {/* Colored dot below number */}
                                     {report ? (
                                         <div
                                             className="absolute bottom-0 sm:bottom-0.5 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full shadow-sm"
@@ -161,7 +166,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                         <div className="absolute bottom-0 sm:bottom-0.5 w-1 sm:w-1.5 h-1 sm:h-1.5" />
                                     )}
                                 </CalendarDayButton>
-                            )
+                            </td>
                         }
                     }}
                 />
