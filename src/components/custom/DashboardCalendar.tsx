@@ -119,13 +119,13 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="w-full flex justify-center shrink-0 min-h-[320px]">
+            <div className="w-full flex justify-center shrink-0">
                 <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     locale={tr}
-                    className="rounded-md border p-2 sm:p-3 w-full shadow-sm max-w-[400px]"
+                    className="rounded-md border p-2 sm:p-3 w-full shadow-sm"
                     modifiers={reportModifiers}
                     modifiersStyles={{
                         ...reportModifiersStyles
