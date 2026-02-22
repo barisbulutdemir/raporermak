@@ -141,17 +141,16 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                             return (
                                 <CalendarDayButton
                                     {...props}
-                                    className="relative flex flex-col items-center justify-center w-full h-full p-0 bg-transparent hover:bg-black/5 dark:hover:bg-white/5"
+                                    className="relative flex flex-col items-center justify-center w-full h-full p-0 bg-transparent outline-none focus:outline-none focus-visible:ring-0"
                                 >
-                                    {/* Absolute selection ring that never pushes layout elements */}
-                                    {isSelected && (
-                                        <div className="absolute inset-0.5 sm:inset-1 rounded-full border-2 border-primary pointer-events-none" />
-                                    )}
-
                                     {/* Date Number */}
                                     <span className={cn(
-                                        "text-xs sm:text-sm font-semibold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center z-10 leading-none shrink-0",
-                                        isToday ? "bg-primary text-primary-foreground" : "text-foreground"
+                                        "text-xs sm:text-sm font-semibold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center z-10 leading-none shrink-0 transition-colors",
+                                        isSelected
+                                            ? "bg-primary text-primary-foreground"
+                                            : isToday
+                                                ? "bg-accent text-accent-foreground"
+                                                : "text-foreground hover:bg-black/5 dark:hover:bg-white/5"
                                     )}>
                                         {format(date, 'd')}
                                     </span>
