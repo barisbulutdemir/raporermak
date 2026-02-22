@@ -124,7 +124,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 locale={tr}
-                className="rounded-md border p-2 sm:p-3 w-full shadow-sm min-h-[370px]"
+                className="rounded-md border p-2 sm:p-3 w-full shadow-sm"
                 modifiers={{
                     today: new Date(),
                     ...reportModifiers

@@ -208,8 +208,8 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[range-middle=true]:bg-blue-100 data-[range-middle=true]:text-blue-900 data-[range-start=true]:bg-blue-600 data-[range-start=true]:text-white data-[range-start=true]:hover:bg-blue-700 data-[range-start=true]:hover:text-white data-[range-end=true]:bg-blue-600 data-[range-end=true]:text-white data-[range-end=true]:hover:bg-blue-700 data-[range-end=true]:hover:text-white dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-0 sm:min-w-(--cell-size) flex-col gap-1 leading-none font-normal data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
-        defaultClassNames.day_button || "rdp-day_button",
+        "data-[range-middle=true]:bg-blue-100 data-[range-middle=true]:text-blue-900 data-[range-start=true]:bg-blue-600 data-[range-start=true]:text-white data-[range-start=true]:hover:bg-blue-700 data-[range-start=true]:hover:text-white data-[range-end=true]:bg-blue-600 data-[range-end=true]:text-white data-[range-end=true]:hover:bg-blue-700 data-[range-end=true]:hover:text-white dark:hover:text-accent-foreground flex aspect-square size-full flex-col gap-1 leading-none font-normal data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
+        defaultClassNames.day_button,
         className
       )}
       {...props}
