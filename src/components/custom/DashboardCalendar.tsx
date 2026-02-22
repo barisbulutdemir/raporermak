@@ -119,62 +119,32 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="w-full flex justify-center shrink-0">
-                <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    locale={tr}
-                    className="rounded-md border p-2 sm:p-3 w-full shadow-sm"
-                    modifiers={reportModifiers}
-                    modifiersStyles={{
-                        ...reportModifiersStyles
-                    }}
-                    components={{
-                        DayButton: (props) => {
-                            const { day, modifiers, className, ...rest } = props
-                            const date = day.date
-                            const report = getReportForDay(date)
-                            const isToday = isSameDay(date, new Date())
-                            const isSelected = modifiers?.selected
-
-                            return (
-                                <button
-                                    {...rest}
-                                    type="button"
-                                    className={cn(
-                                        "relative flex flex-col items-center justify-center w-full h-full p-0 bg-transparent outline-none focus:outline-none transition-colors",
-                                        "hover:bg-accent/50 rounded-md",
-                                        className
-                                    )}
-                                >
-                                    {/* Date Number */}
-                                    <span className={cn(
-                                        "text-xs sm:text-sm font-semibold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center z-10 leading-none shrink-0 transition-colors",
-                                        isSelected
-                                            ? "bg-primary text-primary-foreground"
-                                            : isToday
-                                                ? "bg-accent text-accent-foreground"
-                                                : "text-foreground group-hover:bg-black/5 dark:group-hover:bg-white/5"
-                                    )}>
-                                        {format(date, 'd')}
-                                    </span>
-
-                                    {/* Colored dot below number */}
-                                    {report ? (
-                                        <div
-                                            className="absolute bottom-0 sm:bottom-0.5 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full shadow-sm"
-                                            style={{ backgroundColor: report.siteColor || '#3b82f6' }}
-                                        />
-                                    ) : (
-                                        <div className="absolute bottom-0 sm:bottom-0.5 w-1 sm:w-1.5 h-1 sm:h-1.5" />
-                                    )}
-                                </button>
-                            )
-                        }
-                    }}
-                />
-            </div>
+            <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                locale={tr}
+                className="rounded-md border p-2 sm:p-3 w-full shadow-sm"
+                modifiers={{
+                    today: new Date(),
+                    ...reportModifiers
+                }}
+                modifiersStyles={{
+                    selected: {
+                        backgroundColor: 'var(--primary)',
+                        color: 'var(--primary-foreground)',
+                        borderRadius: '100%',
+                        fontWeight: '600',
+                    },
+                    today: {
+                        backgroundColor: 'var(--accent)',
+                        color: 'var(--accent-foreground)',
+                        borderRadius: '0.375rem',
+                        fontWeight: '600',
+                    },
+                    ...reportModifiersStyles
+                }}
+            />
 
             {/* Info Section - Toggles between Total Summary and Selected Details */}
             <Card>
