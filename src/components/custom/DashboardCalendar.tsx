@@ -119,7 +119,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center shrink-0 min-h-[320px]">
                 <Calendar
                     mode="single"
                     selected={selectedDate}
@@ -132,16 +132,21 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                     }}
                     components={{
                         DayButton: (props) => {
-                            const { day, modifiers } = props
+                            const { day, modifiers, className, ...rest } = props
                             const date = day.date
                             const report = getReportForDay(date)
                             const isToday = isSameDay(date, new Date())
                             const isSelected = modifiers?.selected
 
                             return (
-                                <CalendarDayButton
-                                    {...props}
-                                    className="relative flex flex-col items-center justify-center w-full h-full p-0 bg-transparent outline-none focus:outline-none focus-visible:ring-0"
+                                <button
+                                    {...rest}
+                                    type="button"
+                                    className={cn(
+                                        "relative flex flex-col items-center justify-center w-full h-full p-0 bg-transparent outline-none focus:outline-none transition-colors",
+                                        "hover:bg-accent/50 rounded-md",
+                                        className
+                                    )}
                                 >
                                     {/* Date Number */}
                                     <span className={cn(
@@ -150,7 +155,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                             ? "bg-primary text-primary-foreground"
                                             : isToday
                                                 ? "bg-accent text-accent-foreground"
-                                                : "text-foreground hover:bg-black/5 dark:hover:bg-white/5"
+                                                : "text-foreground group-hover:bg-black/5 dark:group-hover:bg-white/5"
                                     )}>
                                         {format(date, 'd')}
                                     </span>
@@ -164,7 +169,7 @@ export function DashboardCalendar({ reports, holidays = [] }: { reports: ReportR
                                     ) : (
                                         <div className="absolute bottom-0 sm:bottom-0.5 w-1 sm:w-1.5 h-1 sm:h-1.5" />
                                     )}
-                                </CalendarDayButton>
+                                </button>
                             )
                         }
                     }}
