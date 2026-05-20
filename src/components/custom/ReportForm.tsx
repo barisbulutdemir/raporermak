@@ -1287,17 +1287,19 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Servis Tarihleri</FormLabel>
-                                        <Calendar
-                                            mode="range"
-                                            defaultMonth={field.value?.from}
-                                            selected={field.value as any}
-                                            onSelect={field.onChange}
-                                            numberOfMonths={1}
-                                            locale={tr}
-                                            className="w-full flex justify-center max-w-full"
-                                            modifiers={{ holiday: holidays }}
-                                            modifiersStyles={{ holiday: { color: 'red', fontWeight: 'bold' } }}
-                                        />
+                                        <div className="w-full overflow-x-auto pb-2">
+                                            <Calendar
+                                                mode="range"
+                                                defaultMonth={field.value?.from}
+                                                selected={field.value as any}
+                                                onSelect={field.onChange}
+                                                numberOfMonths={1}
+                                                locale={tr}
+                                                className="w-full flex justify-center min-w-min"
+                                                modifiers={{ holiday: holidays }}
+                                                modifiersStyles={{ holiday: { color: 'red', fontWeight: 'bold' } }}
+                                            />
+                                        </div>
 
                                         <FormMessage />
                                     </FormItem>
