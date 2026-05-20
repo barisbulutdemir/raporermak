@@ -114,7 +114,7 @@ export default async function DashboardLayout({
                 <header className="hidden sm:flex h-14 items-center justify-end gap-4 border-b bg-background px-6">
                     <UserNav userName={session.user.name || 'Kullanıcı'} />
                 </header>
-                <main className="grid flex-1 items-start gap-4 p-3 sm:px-6 sm:py-0 md:gap-8 min-w-0 overflow-x-hidden">
+                <main className="grid flex-1 items-start gap-4 p-3 sm:px-6 sm:py-0 md:gap-8 min-w-0">
                     {children}
                 </main>
             </div>
