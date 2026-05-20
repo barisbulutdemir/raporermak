@@ -1372,7 +1372,7 @@ export function ReportForm({ initialData, reportId, defaultUserName, defaultSign
                                                 type="button"
                                                 variant="ghost"
                                                 size="sm"
-                                                className={cn("w-10 h-10 p-0 text-xs", bgClass)}
+                                                className={cn("w-10 h-10 p-0 text-xs overflow-hidden min-w-0 flex-shrink-0", bgClass)}
                                                 onClick={() => toggleExcludedDate(day)}
                                                 title={format(day, 'dd MMMM yyyy', { locale: tr }) + (active ? ' (Çalışıldı)' : ' (Çalışılmadı)')}
                                             >
